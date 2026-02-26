@@ -1,0 +1,15 @@
+[package]
+name = "bzip2rs"
+version = "0.1.0"
+edition = "2024"
+description = "A Rust implementation of the bzip2 compression/decompression tool."
+repository = "https://github.com/tamada/bzip2rs"
+authors = [
+    "Haruaki Tamada <tamada_f@ke_cafebabe.jp>"
+]
+
+[dependencies]
+bzip2 = "0.6.1"
+clap = { version = "4.5.60", features = ["derive"] }
+env_logger = "0.11.9"
+log = "0.4.29"

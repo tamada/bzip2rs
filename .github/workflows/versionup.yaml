@@ -1,0 +1,39 @@
+name: Version Up
+on:
+  push:
+    branches:
+      - 'release/v[0-9]+.[0-9]+.[0-9]**'
+
+jobs:
+  versionup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branches
+        id: vars
+        run: |
+          echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF##**/v}" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Initialize
+        shell: bash
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Version up
+        id: updating_version
+        run: |
+          sed "s/^version = \".*\"/version = \"${{ steps.vars.outputs.tag }}\"/" Cargo.toml > a ; mv a Cargo.toml
+          # sed "s/\$VERSION/${{ steps.vars.outputs.tag }}/g" .templates/README.md > README.md
+          # sed "s/\$VERSION/${{ steps.vars.outputs.tag }}/g" .templates/template.md > docs/content/_index.md
+          # sed "s/ARG VERSION=.*/ARG VERSION=${{ steps.vars.outputs.tag }}/g" Dockerfile > a ; mv a Dockerfile
+          git commit -a -m "update version to ${{ steps.vars.outputs.tag }}, ready to publish v${{ steps.vars.outputs.tag }}" || true
+
+      - name: Push branch
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.vars.outputs.branch }}
