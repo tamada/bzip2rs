@@ -1,5 +1,3 @@
-use bzip2::Compression;
-
 #[derive(clap::Parser, Debug)]
 #[command(
     version, propagate_version = true,
@@ -87,15 +85,15 @@ impl Bzip2Cli {
         self.stdout || program_name == "bzcat"
     }
 
-    pub fn compress_level(&self) -> Compression {
+    pub fn compress_level(&self) -> usize {
         if self.fast {
-            Compression::fast()
+            1
         } else if self.best {
-            Compression::best()
+            9
         } else if let Some(level) = self.block_size {
-            Compression::new(level as u32)
+            level as usize
         } else {
-            Compression::default()
+            6
         }
     }
 

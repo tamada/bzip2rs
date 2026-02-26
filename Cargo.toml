@@ -8,8 +8,14 @@ authors = [
     "Haruaki Tamada <tamada_f@ke_cafebabe.jp>"
 ]
 
+[features]
+sys  = [ "bzip2" ]
+default = [ "banzai", "bzip2-rs" ]
+
 [dependencies]
-bzip2 = "0.6.1"
+banzai = { version = "0.3.1", optional = true }
+bzip2 = { version = "0.6.1", optional = true }
+bzip2-rs = { version = "0.1.2", optional = true }
 clap = { version = "4.5.60", features = ["derive"] }
 env_logger = "0.11.9"
 log = "0.4.29"
