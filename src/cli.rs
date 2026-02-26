@@ -104,12 +104,10 @@ impl Bzip2Cli {
             Mode::Decompress
         } else if self.test {
             Mode::Test
+        } else if self.input_files.iter().all(|f| f.ends_with(".bz2") || f.ends_with(".tbz2") || f.ends_with(".tbz") || f.ends_with(".tz2")) {
+            Mode::Decompress
         } else {
-            if self.input_files.iter().all(|f| f.ends_with(".bz2") || f.ends_with(".tbz2") || f.ends_with(".tbz") || f.ends_with(".tz2")) {
-                Mode::Decompress
-            } else {
-                Mode::Compress
-            }
+            Mode::Compress
         }
     }
 }
